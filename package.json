@@ -1,0 +1,33 @@
+{
+  "name": "wagoo-desktop",
+  "version": "1.0.0",
+  "description": "Application Desktop pour Wagoo",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "release": "electron-builder --publish always"
+  },
+  "dependencies": {
+    "electron-updater": "^4.5.0",
+    "axios": "^1.0.0"
+  },
+  "devDependencies": {
+    "electron": "^26.0.0",
+    "electron-builder": "^23.0.3"
+  },
+  "build": {
+    "appId": "app.wagoo",
+    "mac": {
+      "category": "app.wagoo"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "leo-lb29",
+      "repo": "wagoo-desktop"
+    }
+  }
+}
