@@ -2,38 +2,43 @@
   "name": "desktop",
   "version": "1.0.0",
   "main": "main.js",
+  "description": "Application de bureau Wagoo",
+  "author": "leo-lb",
+  "license": "MIT",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-  "build": "electron-builder",
-  "publish": "electron-builder --publish always"
-},
-
+    "build": "electron-builder",
+    "publish": "electron-builder --publish always"
+  },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "devDependencies": {
     "electron": "^25.0.0",
-    "electron-builder": "^25.1.8",
+    "electron-builder": "^25.1.8"
+  },
+  "dependencies": {
+    "electron-log": "^5.3.0",
     "electron-updater": "^6.3.9"
   },
-"build": {
-  "appId": "com.wagoo.app",
-  "productName": "Wagoo",
-  "win": {
-    "target": "nsis"
-  },
-  "publish": [
-    {
-      "provider": "github",
-      "owner": "leo-lb29",
-      "repo": "wagoo-desktop"
-    }
-  ]
-},
-
-  "dependencies": {
-    "electron-log": "^5.3.0"
+  "build": {
+    "appId": "com.wagoo.app",
+    "productName": "Wagoo",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": ["nsis"]
+    },
+    "asar": true,
+    "asarUnpack": [
+      "node_modules/electron-updater"
+    ],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "leo-lb29",
+        "repo": "wagoo-desktop"
+      }
+    ]
   }
 }
