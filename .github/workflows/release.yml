@@ -1,0 +1,58 @@
+name: Build & Release Electron App
+
+on:
+  push:
+    branches:
+      - main  # Remplace par ta branche si nécessaire
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]  # Windows, macOS, Linux
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18  # Remplace par ta version
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build application
+        run: npm run dist -- --publish=never
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Build-${{ matrix.os }}
+          path: dist/  # Dossier où Electron Builder génère les fichiers
+
+  release:
+    needs: build  # Attendre que le build soit terminé avant de créer la release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: dist/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v1.0.${{ github.run_number }}  # Numéro de version auto-incrémenté
+          name: "Release v1.0.${{ github.run_number }}"
+          draft: false
+          prerelease: false
+          files: dist/**
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
