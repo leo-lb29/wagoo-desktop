@@ -7,7 +7,7 @@
   "license": "ISC",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder",
+    "dist": "electron-builder",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "build": {
@@ -50,13 +50,13 @@
     }
   },
   "devDependencies": {
-    "electron": "^33.0.2",
+    "electron": "^34.3.0",
     "electron-builder": "^25.1.8"
   },
   "dependencies": {
-    "@capacitor/android": "^6.1.2",
-    "@capacitor/cli": "^6.1.2",
-    "@capacitor/core": "^6.1.2",
+    "@capacitor/android": "^7.0.1",
+    "@capacitor/cli": "^7.0.1",
+    "@capacitor/core": "^7.0.1",
     "electron-updater": "^6.3.9"
   },
   "keywords": []
