@@ -1,0 +1,88 @@
+name: Build and Release
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+  build-mac:
+    needs: test
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Electron App (macOS)
+        run: npm run dist -- --publish=never
+
+      - name: Upload macOS build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: mac-build
+          path: dist/
+
+  build-windows:
+    needs: test
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Electron App (Windows)
+        run: npm run dist -- --publish=never
+
+      - name: Upload Windows build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-build
+          path: dist/
+
+  release:
+    needs: [build-mac, build-windows]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Download macOS build
+        uses: actions/download-artifact@v3
+        with:
+          name: mac-build
+          path: dist/mac
+
+      - name: Download Windows build
+        uses: actions/download-artifact@v3
+        with:
+          name: windows-build
+          path: dist/windows
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: "Release v1.0.${{ github.run_number }}"
+          draft: false
+          prerelease: false
+          files: |
+            dist/mac/*.dmg
+            dist/mac/*.zip
+            dist/windows/*.exe
+            dist/windows/*.nsis.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
