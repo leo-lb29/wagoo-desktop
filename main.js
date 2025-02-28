@@ -3,7 +3,7 @@ const { autoUpdater } = require("electron-updater");
 const path = require("path");
 
 let mainWindow;
-let loadUrl = "https://laravel.projectmaker.bzh/"; // URL par défaut
+let loadUrl = "https://wagoo.io/"; // URL par défaut
 let protocolUrl = null; // Stocke l'URL passée via le protocole
 
 function createWindow(url) {
@@ -33,7 +33,7 @@ function createWindow(url) {
 // Gestion du protocole personnalisé
 app.on("ready", () => {
   nativeTheme.themeSource = 'dark';
-  app.setAsDefaultProtocolClient("projectmaker");
+  app.setAsDefaultProtocolClient("wagoo");
 
   createWindow(loadUrl); // Charge l'URL par défaut au démarrage
   createAppMenu();
@@ -43,7 +43,7 @@ app.on("ready", () => {
 // Événement déclenché lors de l'ouverture d'une URL avec le protocole personnalisé
 app.on("open-url", (event, url) => {
   event.preventDefault();
-  protocolUrl = url.replace("projectmaker://", "https://beta.dash.project-maker.fr/");
+  protocolUrl = url.replace("wagoo://", "https://beta.dash.project-maker.fr/");
   
   // Affiche la boîte de dialogue avec l'URL reçue
   dialog.showMessageBox({
@@ -84,7 +84,7 @@ if (!gotTheLock) {
     if (commandLine.length > 1) {
       const urlArg = commandLine[commandLine.length - 1];
       if (urlArg.startsWith("projectmaker://")) {
-        protocolUrl = urlArg.replace("projectmaker://", "https://laravel.projectmaker.bzh/");
+        protocolUrl = urlArg.replace("projectmaker://", "https://wagoo.io/");
 
         if (mainWindow) {
           mainWindow.loadURL(protocolUrl); // Charge l'URL sans créer une nouvelle fenêtre
