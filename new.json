@@ -1,0 +1,17 @@
+{
+    "PackageIdentifier": "project-maker.fr.DashboardPM",
+    "PackageVersion": "1.0.2",
+    "Publisher": "Project Maker",
+    "PackageName": "Dashboard PM",
+    "License": "MIT",
+    "ShortDescription": "A dashboard application for project management.",
+    "Installers": [
+      {
+        "Architecture": "x64",
+        "InstallerUrl": "https://github.com/ProjectMakerfr/dash.project-maker.fr/releases/download/v1.0.2/Dashboard-PM-1.0.2.exe",
+        "InstallerSha256": "64c89d263c78838974119fda74ed1f7e85992c1db6352998c282ad92f87129a7",
+        "InstallerType": "exe"
+      }
+    ]
+  }
+  

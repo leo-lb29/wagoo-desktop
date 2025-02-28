@@ -1,33 +1,63 @@
 {
-  "name": "wagoo-desktop",
+  "name": "dash-project-maker-fr",
   "version": "1.0.0",
-  "description": "Application Desktop pour Wagoo",
-  "main": "src/main.js",
+  "main": "main.js",
+  "description": "Dashboard Officiel de Project Maker",
+  "author": "project-maker.fr",
+  "license": "ISC",
   "scripts": {
     "start": "electron .",
     "build": "electron-builder",
-    "release": "electron-builder --publish always"
-  },
-  "dependencies": {
-    "electron-updater": "^4.5.0",
-    "axios": "^1.0.0"
-  },
-  "devDependencies": {
-    "electron": "^26.0.0",
-    "electron-builder": "^23.0.3"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "build": {
-    "appId": "app.wagoo",
     "mac": {
-      "category": "app.wagoo"
+      "target": [
+        "dmg",
+        "zip"
+      ]
     },
-    "win": {
-      "target": "nsis"
-    },
+    "appId": "fr.projectmaker.dash",
+    "productName": "Dashboard PM",
     "publish": {
       "provider": "github",
-      "owner": "leo-lb29",
-      "repo": "wagoo-desktop"
+      "owner": "ProjectMakerfr",
+      "repo": "dash.project-maker.fr"
+    },
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "package.json"
+    ],
+    "protocols": [
+      {
+        "name": "Maille Protocol",
+        "schemes": [
+          "maille"
+        ],
+        "role": "Viewer"
+      }
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "logo.ico"
     }
-  }
+  },
+  "devDependencies": {
+    "electron": "^33.0.2",
+    "electron-builder": "^25.1.8"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/cli": "^6.1.2",
+    "@capacitor/core": "^6.1.2",
+    "electron-updater": "^6.3.9"
+  },
+  "keywords": []
 }
