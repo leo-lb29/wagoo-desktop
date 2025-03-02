@@ -1,0 +1,7 @@
+{
+    "files.autoSave": "afterDelay",
+    "files.exclude": {
+        "**/.vscode": true,
+        "**/.wagoo": true
+    }
+}

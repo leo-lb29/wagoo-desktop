@@ -1,9 +1,16 @@
-const { app, BrowserWindow, dialog, Menu, protocol, nativeTheme } = require("electron");
+const {
+  app,
+  BrowserWindow,
+  dialog,
+  Menu,
+  protocol,
+  nativeTheme,
+} = require("electron");
 const { autoUpdater } = require("electron-updater");
 const path = require("path");
 
 let mainWindow;
-let loadUrl = "https://wagoo.io/"; // URL par défaut
+let loadUrl = "https://wagoo.io/login"; // URL par défaut
 let protocolUrl = null; // Stocke l'URL passée via le protocole
 
 function createWindow(url) {
@@ -21,8 +28,11 @@ function createWindow(url) {
     },
   });
 
+  mainWindow.maximize(); // Maximiser la fenêtre au démarrage
+
   mainWindow.loadURL(url, {
-    extraHeaders: "Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self';",
+    extraHeaders:
+      "Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self';",
   });
 
   mainWindow.on("closed", () => {
@@ -32,7 +42,7 @@ function createWindow(url) {
 
 // Gestion du protocole personnalisé
 app.on("ready", () => {
-  nativeTheme.themeSource = 'dark';
+  nativeTheme.themeSource = "dark";
   app.setAsDefaultProtocolClient("wagoo");
 
   createWindow(loadUrl); // Charge l'URL par défaut au démarrage
@@ -43,21 +53,23 @@ app.on("ready", () => {
 // Événement déclenché lors de l'ouverture d'une URL avec le protocole personnalisé
 app.on("open-url", (event, url) => {
   event.preventDefault();
-  protocolUrl = url.replace("wagoo://", "https://beta.dash.project-maker.fr/");
-  
+  protocolUrl = url.replace("wagoo://", "https://wagoo.io/");
+
   // Affiche la boîte de dialogue avec l'URL reçue
-  dialog.showMessageBox({
-    type: "info",
-    title: "URI détecté",
-    message: `L'application a reçu l'URI : ${url}`,
-  }).then(() => {
-    if (mainWindow) {
-      mainWindow.loadURL(protocolUrl); // Charge l'URL si la fenêtre existe
-      mainWindow.focus();
-    } else {
-      createWindow(protocolUrl); // Crée une nouvelle fenêtre avec l'URL
-    }
-  });
+  dialog
+    .showMessageBox({
+      type: "info",
+      title: "URI détecté",
+      message: `L'application a reçu l'URI : ${url}`,
+    })
+    .then(() => {
+      if (mainWindow) {
+        mainWindow.loadURL(protocolUrl); // Charge l'URL si la fenêtre existe
+        mainWindow.focus();
+      } else {
+        createWindow(protocolUrl); // Crée une nouvelle fenêtre avec l'URL
+      }
+    });
 });
 
 app.on("window-all-closed", () => {
@@ -83,8 +95,8 @@ if (!gotTheLock) {
   app.on("second-instance", (event, commandLine) => {
     if (commandLine.length > 1) {
       const urlArg = commandLine[commandLine.length - 1];
-      if (urlArg.startsWith("projectmaker://")) {
-        protocolUrl = urlArg.replace("projectmaker://", "https://wagoo.io/");
+      if (urlArg.startsWith("wagoo://")) {
+        protocolUrl = urlArg.replace("wagoo://", "https://wagoo.io/");
 
         if (mainWindow) {
           mainWindow.loadURL(protocolUrl); // Charge l'URL sans créer une nouvelle fenêtre
@@ -101,25 +113,31 @@ if (!gotTheLock) {
 
 // AutoUpdater et création du menu
 autoUpdater.on("update-available", () => {
-  dialog.showMessageBox({
-    type: "info",
-    title: "Mise à jour disponible",
-    message: "Une nouvelle version est disponible. Voulez-vous l'installer maintenant ou plus tard ?",
-    buttons: ["Installer maintenant", "Installer au prochain démarrage"],
-  }).then((result) => {
-    if (result.response === 0) {
-      autoUpdater.downloadUpdate();
-    }
-  });
+  dialog
+    .showMessageBox({
+      type: "info",
+      title: "Mise à jour disponible",
+      message:
+        "Une nouvelle version est disponible. Voulez-vous l'installer maintenant ou plus tard ?",
+      buttons: ["Installer maintenant", "Installer au prochain démarrage"],
+    })
+    .then((result) => {
+      if (result.response === 0) {
+        autoUpdater.downloadUpdate();
+      }
+    });
 });
 
 autoUpdater.on("update-downloaded", () => {
-  dialog.showMessageBox({
-    title: "Mise à jour téléchargée",
-    message: "La mise à jour a été téléchargée. Elle sera installée au prochain redémarrage.",
-  }).then(() => {
-    autoUpdater.quitAndInstall();
-  });
+  dialog
+    .showMessageBox({
+      title: "Mise à jour téléchargée",
+      message:
+        "La mise à jour a été téléchargée. Elle sera installée au prochain redémarrage.",
+    })
+    .then(() => {
+      autoUpdater.quitAndInstall();
+    });
 });
 
 function createAppMenu() {
